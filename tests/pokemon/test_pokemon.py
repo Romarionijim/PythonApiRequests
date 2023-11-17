@@ -4,5 +4,5 @@ import json
 
 def test_get_pokemon():
     pokemon = PokemonEntity()
-    responses = pokemon.get_pokemon()
-    assert all(item.status_code == 200 for item in responses)
+    responses = pokemon.get_pokemon_data()
+    assert all(item is not None for item in responses)

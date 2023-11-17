@@ -7,9 +7,9 @@ import pytest
 class PokemonEntity(ApiRequests):
     __base_url = 'https://pokeapi.co/api/v2/pokemon'
 
-    def get_pokemon(self):
+    def get_pokemon_data(self):
         response = self.get(self.__base_url, paginate=True, offset=0, limit=100, request_key='results')
-        return [item['status_code'] for item in response]
+        return response
 
     def get_pokemon_total_count(self):
         response = self.get(self.__base_url)

@@ -2,22 +2,12 @@ import requests
 import os
 from typing import Dict, TypeVar, Optional, List, Union
 from dotenv import load_dotenv
-from enum import Enum
+from api.infra.enums.http_methods import HttpMethods
 import logging
-import json
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 load_dotenv()
 
 T = TypeVar("T")
-
-
-class HttpMethods(Enum):
-    GET = "GET",
-    POST = "POST",
-    PUT = "PUT",
-    PATCH = "PATCH",
-    DELETE = "DELETE"
 
 
 class ApiRequests:
