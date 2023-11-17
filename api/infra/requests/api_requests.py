@@ -21,8 +21,6 @@ class HttpMethods(Enum):
 
 
 class ApiRequests:
-    CONTENT_TYPE = "Content-Type"
-    ACCEPT = "Accept"
 
     def __init__(self):
         self.requests = requests.Session()
@@ -57,7 +55,7 @@ class ApiRequests:
 
     def __paginate_request(self, method: HttpMethods, url: str, data: Optional[Dict[str, T]] = None,
                            params: Optional[Dict[str, T]] = None, token_required: bool = None, page: int = None,
-                           limit: int = None, offset: int = None):
+                           limit: int = None, offset: int = None, request_key: str = None):
         response_data: list = []
         while True:
             if page is not None:
@@ -67,7 +65,7 @@ class ApiRequests:
                 response = self.__make_request(method, url, data=data, params=current_params,
                                                token_required=token_required)
                 json_result = response.json()
-                if not json_result:
+                if not json_result or len(json_result) == 0:
                     break
                 response_data.extend(json_result)
                 page += 1
@@ -78,10 +76,17 @@ class ApiRequests:
                 response = self.__make_request(method, url, data=data, params=current_params,
                                                token_required=token_required)
                 json_data = response.json()
-                if not json_data:
-                    break
-                response_data.append(json_data)
-                offset += limit
+                if request_key is not None:
+                    specific_key = json_data[request_key]
+                    if len(specific_key) == 0:
+                        break
+                    response_data.extend(specific_key)
+                    offset += limit
+                else:
+                    if not json_data or len(json_data) == 0:
+                        break
+                    response_data.extend(json_data)
+                    offset += limit
 
         return response_data
 
@@ -89,19 +94,20 @@ class ApiRequests:
                                                  params: Optional[Dict[str, T]] = None,
                                                  data: Optional[Dict[str, T]] = None, paginate: bool = False,
                                                  token_required: bool = False, page: int = None, offset: int = None,
-                                                 limit: int = None):
+                                                 limit: int = None, request_key: str = None):
         """make a regular http request or paginate in case of pagination mechanism"""
         if paginate:
             return self.__paginate_request(method, url, params=params, data=data, token_required=token_required,
-                                           page=page, offset=offset, limit=limit)
+                                           page=page, offset=offset, limit=limit, request_key=request_key)
         else:
             return self.__make_request(method, url, data=data, params=params, token_required=token_required)
 
     def get(self, url: str, params: Optional[Dict[str, str]] = None, paginate: Optional[bool] = False, page: int = None,
             offset: int = None,
-            limit: int = None):
+            limit: int = None, request_key: str = None):
         return self.__request_api_with_or_without_pagination(HttpMethods.GET, url, params=params, paginate=paginate,
-                                                             page=page, offset=offset, limit=limit)
+                                                             page=page, offset=offset, limit=limit,
+                                                             request_key=request_key)
 
     def post(self, url: str, data: Dict[str, T], token_required: bool = None, paginate: Optional[bool] = False,
              page: int = None, offset: int = None,

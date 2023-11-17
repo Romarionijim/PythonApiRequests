@@ -4,4 +4,5 @@ import json
 
 def test_get_pokemon():
     pokemon = PokemonEntity()
-    pokemon.get_pokemon()
+    responses = pokemon.get_pokemon()
+    assert all(item.status_code == 200 for item in responses)

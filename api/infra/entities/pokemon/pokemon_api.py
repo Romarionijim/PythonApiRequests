@@ -8,11 +8,8 @@ class PokemonEntity(ApiRequests):
     __base_url = 'https://pokeapi.co/api/v2/pokemon'
 
     def get_pokemon(self):
-        response = self.get(self.__base_url, paginate=True, offset=0, limit=100)
-        response_json = response.json()
-        results = response_json['results']
-        print(results)
-        return results
+        response = self.get(self.__base_url, paginate=True, offset=0, limit=100, request_key='results')
+        return [item['status_code'] for item in response]
 
     def get_pokemon_total_count(self):
         response = self.get(self.__base_url)
