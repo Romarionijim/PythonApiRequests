@@ -1,4 +1,4 @@
-from api.infra.entities.pokemon.pokemon_api import PokemonEntity
+from requests2.api.infra.entities.pokemon.pokemon_api import PokemonEntity
 import json
 
 
