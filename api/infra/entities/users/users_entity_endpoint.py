@@ -1,7 +1,8 @@
-from api.infra.requests.api_requests import ApiRequests
-from api.infra.enums.urls import Urls
-from api.infra.enums.end_points import EndPoints
-from api.infra.enums.http_methods import HttpMethods
+from requests2.api.infra.requests.api_requests import ApiRequests
+from requests2.api.infra.enums.urls import Urls
+from requests2.api.infra.enums.end_points import EndPoints
+from requests2.api.infra.utils.interfaces.request_options import RequestOptions
+from requests2.api.infra.enums.http_methods import HttpMethods
 
 
 class UsersEntity(ApiRequests):
@@ -11,7 +12,7 @@ class UsersEntity(ApiRequests):
 
     def get_inactive_users(self):
         params = {'status': 'inactive'}
-        response = self.get(self.__USERS_URL, params=params, paginate=True)
+        response = self.get(self.__USERS_URL, params=params)
         return response
 
     def delete_inactive_users(self):
@@ -19,6 +20,6 @@ class UsersEntity(ApiRequests):
         inactive_users = self.get_inactive_users()
         for user in inactive_users:
             user_id = user.get("id")
-            response = self.delete(f"{self.__USERS_URL}/{user_id}", token_required=True)
+            response = self.delete(f"{self.__USERS_URL}/{user_id}", RequestOptions(token_required=True))
             responses.append(response)
         return responses

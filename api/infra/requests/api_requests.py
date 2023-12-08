@@ -44,6 +44,12 @@ class ApiRequests:
 
         return response
 
+    def __process_response_key(self, key, json_data):
+        if key is not None:
+            response_key = json_data[key]
+            return response_key
+        raise ValueError(f" the key {key} might be None")
+
     def __paginate_request(self, method: HttpMethods, url: str, data: Optional[Dict[str, T]] = None,
                            params: Optional[Dict[str, T]] = None, options: RequestOptions = RequestOptions()):
         response_data: list = []
@@ -55,8 +61,13 @@ class ApiRequests:
                 response = self.__make_request(method, url, data=data, params=current_params,
                                                options=options)
                 json_result = response.json()
-                if not json_result or len(json_result) == 0:
-                    break
+                if options.request_key is not None:
+                    response_key = self.__process_response_key(options.request_key, json_result)
+                    if not response_key:
+                        break
+                else:
+                    if not json_result or len(json_result) == 0:
+                        break
                 response_data.extend(json_result)
                 options.page += 1
 
