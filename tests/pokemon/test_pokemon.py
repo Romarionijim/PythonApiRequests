@@ -14,4 +14,5 @@ def test_get_pokemon_data():
     response_data = response.json()
     assert response.status_code == 200
     assert response is not None
+    assert response_data['count'] == 1292
     assert isinstance(response_data['results'], list) == True
