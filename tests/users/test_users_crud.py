@@ -15,6 +15,21 @@ def test_get_users():
             my_f.write(dump_json)
 
 
+def test_get_user_json_file_response():
+    file_path = 'info_file.json'
+    with open(file_path, 'r') as file:
+        file_content = json.load(file)
+        expected_data = {
+            "id": 5822018,
+            "name": "Nalini Chattopadhyay",
+            "email": "nalini_chattopadhyay@morar.example",
+            "gender": "female",
+            "status": "inactive"
+        }
+
+        assert expected_data in file_content
+
+
 def test_delete_inactive_users():
     users = UsersEntity()
     responses = users.delete_inactive_users()
