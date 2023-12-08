@@ -11,5 +11,7 @@ def test_get_pokemon_data_length():
 def test_get_pokemon_data():
     pokemon = PokemonEntity()
     response = pokemon.get_pokemon_data()
+    response_data = response.json()
     assert response.status_code == 200
     assert response is not None
+    assert isinstance(response_data['results'], list) == True

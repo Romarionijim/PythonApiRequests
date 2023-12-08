@@ -1,10 +1,8 @@
 import json
 
 import pytest
-from api.infra.requests.api_requests import ApiRequests
-from api.infra.entities.users.users_entity_endpoint import UsersEntity
-
-"""this code gets the users from gorest api"""
+from requests2.api.infra.requests.api_requests import ApiRequests
+from requests2.api.infra.entities.users.users_entity_endpoint import UsersEntity
 
 
 def test_get_users():
@@ -23,6 +21,3 @@ def test_delete_inactive_users():
     assert all(response.status_code == 204 for response in responses)
     inactive_users = users.get_inactive_users()
     assert inactive_users == []
-
-
-
