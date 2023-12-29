@@ -5,7 +5,7 @@ import json
 def test_get_pokemon_data_length():
     pokemon = PokemonEntity()
     responses = pokemon.get_pokemon_data_length()
-    assert responses == 1292
+    assert responses == 1302
 
 
 def test_get_pokemon_data():

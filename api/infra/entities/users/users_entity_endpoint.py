@@ -21,6 +21,6 @@ class UsersEntity(ApiRequests):
         for user in inactive_users:
             user_id = user.get("id")
             response = self.delete(f'{self.URL}/{self.USERS_ENDPOINT}/{user_id}',
-                                   RequestOptions(token_required=True))
+                                   options=RequestOptions(token_required=True))
             responses.append(response)
         return responses
