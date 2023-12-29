@@ -2,8 +2,8 @@ from typing import Optional
 
 
 class RequestOptions:
-    """class that serves as an interface with reusable api optional  params - this class needs to be instantiated and
-    passed as a dependency injection"""
+    """class that serves as an interface with reusable api optional params - this class needs to be instantiated and
+    passed as a dependency injection to provide the optional params in the 'options' key"""
     token_required: bool = False
     paginate: bool = False,
     page: Optional[int] = None

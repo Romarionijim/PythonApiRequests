@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from requests2.api.infra.enums.http_methods import HttpMethods
 from requests2.api.infra.utils.interfaces.request_options import RequestOptions
 import logging
+from requests2.api.infra.utils.custom_exceptions.exceptions import PaginationError
 
 load_dotenv()
 
@@ -44,59 +45,64 @@ class ApiRequests:
 
         return response
 
-    def __process_response_key(self, key, json_data):
-        if key is not None:
-            response_key = json_data[key]
-            return response_key
-        raise ValueError(f" the key {key} might be None")
+    def __get_specific_response_key(self, key: str, json_data: Dict[str, T]):
+        """this is a helper function that retrieves a specific key from the json response after making a request"""
+        if key is None:
+            raise ValueError(f" the key {key} was not found or may be None")
+        response_key = json_data[key]
+        return response_key
 
     def __paginate_request(self, method: HttpMethods, url: str, data: Optional[Dict[str, T]] = None,
                            params: Optional[Dict[str, T]] = None, options: RequestOptions = RequestOptions()):
-        response_data: list = []
+        """helper function that provides pagination options - either by page pagination or by offset and limit
+        pagination"""
+
+        current_params = params.copy() if params else {}
+        response_data_list: list = []
         while True:
             if options.page is not None:
-                current_params = params.copy() if params else {}
                 current_params['page'] = options.page
-
                 response = self.__make_request(method, url, data=data, params=current_params,
                                                options=options)
-                json_result = response.json()
+                response_json_data = response.json()
                 if options.request_key is not None:
-                    response_key = self.__process_response_key(options.request_key, json_result)
+                    response_key = self.__get_specific_response_key(options.request_key, response_json_data)
                     if not response_key:
                         break
                 else:
-                    if not json_result or len(json_result) == 0:
+                    if not response_json_data or len(response_json_data) == 0:
                         break
-                response_data.extend(json_result)
+                response_data_list.extend(response_json_data)
                 options.page += 1
-
+            # ==========================================================================
             elif options.limit is not None and options.offset is not None:
-                current_params = params.copy() if params else {}
                 current_params.update({'limit': options.limit, 'offset': options.offset})
                 response = self.__make_request(method, url, data=data, params=current_params,
                                                options=options)
-                json_data = response.json()
-                if options.request_key is not None:
-                    specific_key = json_data[options.request_key]
-                    if len(specific_key) == 0:
-                        break
-                    response_data.extend(specific_key)
-                    options.offset += options.limit
-                else:
-                    if not json_data or len(json_data) == 0:
-                        break
-                    response_data.extend(json_data)
-                    options.offset += options.limit
+                response_json_data = response.json()
 
-        return response_data
+                if options.request_key is not None:
+                    request_key = self.__get_specific_response_key(options.request_key, response_json_data)
+                    if not request_key:
+                        break
+                    response_data_list.extend(request_key)
+                else:
+                    if not response_json_data or len(response_json_data) == 0:
+                        break
+                    response_data_list.extend(response_json_data)
+                options.offset += options.limit
+            # ==========================================================================
+            else:
+                raise PaginationError("none of the pagination options were provided")
+
+        return response_data_list
 
     def __make_http_request(self, method: HttpMethods, url: str,
                             params: Optional[Dict[str, T]] = None,
                             data: Optional[Dict[str, T]] = None,
                             options: RequestOptions = RequestOptions()):
-        """make a regular request or make a request by using pagination by passing the paginate parameter if to
-        paginate or not"""
+        """helper method that sends http request which can include pagination - this method is encapsulated and is
+        used by the public CRUD methods below"""
         if options.paginate:
             return self.__paginate_request(method, url, params=params, data=data, options=options)
         else:
