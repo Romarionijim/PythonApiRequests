@@ -2,12 +2,19 @@ from requests2.api.infra.requests.api_requests import ApiRequests
 from requests2.api.infra.enums.urls import Urls
 from requests2.api.infra.enums.end_points import EndPoints
 from requests2.api.infra.utils.interfaces.request_options import RequestOptions
-from requests2.api.infra.enums.http_methods import HttpMethods
+from requests2.api.infra.utils.faker.fake_data_generator import FakeDataGenerator
 
 
 class UsersEntity(ApiRequests):
     URL = Urls.GO_REST_API_URL.value
     USERS_ENDPOINT = EndPoints.USERS_END_POINT.value
+
+    def get_users(self):
+        users_end_point = self.get(f'{self.URL}/{self.USERS_ENDPOINT}')
+        if users_end_point.status_code != 200:
+            raise Exception('GET users did not get 200 status code response')
+        users_json_object = users_end_point.json()
+        return users_json_object
 
     def get_inactive_users(self):
         params = {'status': 'inactive'}
@@ -24,3 +31,76 @@ class UsersEntity(ApiRequests):
                                    options=RequestOptions(token_required=True))
             responses.append(response)
         return responses
+
+    def __get_gender(self, gender: str):
+        gender_params = {'gender': gender}
+        response = self.get(f'{self.URL}/{self.USERS_ENDPOINT}', params=gender_params)
+        response_data = response.json()
+        return response_data
+
+    def make_genders_even(self):
+        """function that takes the gender difference and makes males and females even"""
+        male_gender_count = len(self.__get_gender('male'))
+        female_gender_count = len(self.__get_gender('female'))
+        count_difference = abs(male_gender_count - female_gender_count)
+        responses = []
+        if male_gender_count == female_gender_count:
+            return
+        elif male_gender_count > female_gender_count:
+            for i in range(count_difference):
+                female_data = {
+                    "id": FakeDataGenerator.get_random_number(),
+                    "name": FakeDataGenerator.get_random_female_last_name(),
+                    "email": FakeDataGenerator.get_random_email(),
+                    "gender": "female",
+                    "status": "active"
+                }
+                response = self.post(f'{self.URL}/{self.USERS_ENDPOINT}', female_data,
+                                     options=RequestOptions(token_required=True))
+                responses.append(response)
+        else:
+            for i in range(count_difference):
+                male_data = {
+                    "id": FakeDataGenerator.get_random_number(),
+                    "name": FakeDataGenerator.get_random_male_first_name(),
+                    "email": FakeDataGenerator.get_random_email(),
+                    "gender": "male",
+                    "status": "active"
+                }
+                response = self.post(f'{self.URL}/{self.USERS_ENDPOINT}', male_data,
+                                     options=RequestOptions(token_required=True))
+                responses.append(response)
+
+        return responses
+
+    def replace_extension_for_each_user(self):
+        """replaces the email extension for all users to '.co.il'"""
+        user_objects = self.get_users()
+        responses: list = []
+        for user in user_objects:
+            email = user.get("email")
+            email_extension = self.__get_email_extension(email)
+            if email_extension != 'co.il':
+                new_extension = email.replace(email_extension, 'co.il')
+                user_id = user.get("id")
+                new_email = {
+                    "email": new_extension
+                }
+                response = self.patch(f'{self.URL}/{self.USERS_ENDPOINT}/{user_id}', new_email,
+                                      options=RequestOptions(token_required=True))
+                responses.append(response)
+        return responses
+
+    def __get_email_extension(self, email: str):
+        domain = email.split('@').pop()
+        extension = domain.split('.')[-1]
+        return extension
+
+    def get_current_user_email_extensions(self):
+        email_extension_list: list = []
+        users = self.get_users()
+        for user in users:
+            user_email = user.get("email")
+            email_extensions = self.__get_email_extension(user_email)
+            email_extension_list.append(email_extensions)
+        return email_extension_list
