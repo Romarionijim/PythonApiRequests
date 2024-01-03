@@ -18,7 +18,7 @@ class ApiRequests:
         self.requests = requests.Session()
         self.logger = logging.getLogger(__name__)
 
-    def __is_token_required(self, headers: Dict[str, str], options: RequestOptions):
+    def __is_token_required(self, headers: Dict[str, str], options: RequestOptions = RequestOptions()):
         if options.token_required:
             headers["Authorization"] = f"Bearer {os.getenv('TOKEN')}"
 
