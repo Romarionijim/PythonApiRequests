@@ -58,4 +58,8 @@ def test_replace_email_extension_for_each_user(entity_class_object_creation):
 
 def test_make_male_and_female_gender_even(entity_class_object_creation):
     users = entity_class_object_creation
-
+    responses = users.make_genders_even()
+    assert all(response.status_code == 200 for response in responses)
+    male_gender = users.get_male_gender_count()
+    female_gender = users.get_female_gender_count()
+    assert male_gender == female_gender
