@@ -38,14 +38,22 @@ class UsersEntity(ApiRequests):
         response_data = response.json()
         return response_data
 
+    def get_male_gender_count(self):
+        male_gender = self.__get_gender('male')
+        return len(male_gender)
+
+    def get_female_gender_count(self):
+        female_gender = self.__get_gender('female')
+        return len(female_gender)
+
     def make_genders_even(self):
         """function that takes the gender difference and makes males and females even"""
-        male_gender_count = len(self.__get_gender('male'))
-        female_gender_count = len(self.__get_gender('female'))
+        male_gender_count = self.get_male_gender_count()
+        female_gender_count = self.get_female_gender_count()
         count_difference = abs(male_gender_count - female_gender_count)
         responses = []
         if male_gender_count == female_gender_count:
-            return
+            return responses
         elif male_gender_count > female_gender_count:
             for i in range(count_difference):
                 female_data = {
