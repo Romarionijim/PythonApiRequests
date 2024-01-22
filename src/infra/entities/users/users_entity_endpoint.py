@@ -1,8 +1,8 @@
-from requests2.api.infra.requests.api_requests import ApiRequests
-from requests2.api.infra.enums.urls import Urls
-from requests2.api.infra.enums.end_points import EndPoints
-from requests2.api.infra.utils.interfaces.request_options import RequestOptions
-from requests2.api.infra.utils.faker.fake_data_generator import FakeDataGenerator
+from PythonApiRequests.src.infra.requests.api_requests import ApiRequests
+from PythonApiRequests.src.infra.enums.urls import Urls
+from PythonApiRequests.src.infra.enums.end_points import EndPoints
+from PythonApiRequests.src.infra.utils.interfaces.request_options import RequestOptions
+from PythonApiRequests.src.infra.utils.faker.fake_data_generator import FakeDataGenerator
 
 
 class UsersEntity(ApiRequests):

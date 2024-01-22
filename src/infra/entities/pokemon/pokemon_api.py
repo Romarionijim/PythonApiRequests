@@ -1,6 +1,6 @@
 import json
 
-from requests2.api.infra.requests.api_requests import ApiRequests, RequestOptions
+from PythonApiRequests.src.infra.requests.api_requests import ApiRequests, RequestOptions
 import pytest
 
 

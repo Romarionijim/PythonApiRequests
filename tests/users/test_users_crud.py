@@ -1,9 +1,9 @@
 import json
-from requests2.api.infra.utils.test_steps.steps import Step
+from PythonApiRequests.src.infra.utils.test_steps.steps import Step
 
 import pytest
-from requests2.api.infra.requests.api_requests import ApiRequests
-from requests2.api.infra.entities.users.users_entity_endpoint import UsersEntity
+from PythonApiRequests.src.infra.requests.api_requests import ApiRequests
+from PythonApiRequests.src.infra.entities.users.users_entity_endpoint import UsersEntity
 
 
 @pytest.fixture()

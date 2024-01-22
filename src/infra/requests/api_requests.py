@@ -2,10 +2,10 @@ import requests
 import os
 from typing import Dict, TypeVar, Optional, List, Union
 from dotenv import load_dotenv
-from requests2.api.infra.enums.http_methods import HttpMethods
-from requests2.api.infra.utils.interfaces.request_options import RequestOptions
+from PythonApiRequests.src.infra.enums.http_methods import HttpMethods
+from PythonApiRequests.src.infra.utils.interfaces.request_options import RequestOptions
 import logging
-from requests2.api.infra.utils.custom_exceptions.exceptions import PaginationError
+from PythonApiRequests.src.infra.utils.custom_exceptions.exceptions import PaginationError
 
 load_dotenv()
 
