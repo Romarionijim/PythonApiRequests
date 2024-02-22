@@ -5,7 +5,7 @@ from PythonApiRequests.src.infra.utils.interfaces.request_options import Request
 from PythonApiRequests.src.infra.utils.faker.fake_data_generator import FakeDataGenerator
 
 
-class UsersEntity(ApiRequests):
+class UsersApi(ApiRequests):
     URL = Urls.GO_REST_API_URL.value
     USERS_ENDPOINT = EndPoints.USERS_END_POINT.value
 

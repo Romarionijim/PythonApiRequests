@@ -3,12 +3,12 @@ from PythonApiRequests.src.infra.utils.test_steps.steps import Step
 
 import pytest
 from PythonApiRequests.src.infra.requests.api_requests import ApiRequests
-from PythonApiRequests.src.infra.entities.users.users_entity_endpoint import UsersEntity
+from PythonApiRequests.src.infra.recources.users.users_api import UsersApi
 
 
 @pytest.fixture()
 def entity_class_object_creation():
-    users = UsersEntity()
+    users = UsersApi()
     yield users
 
 

@@ -4,7 +4,7 @@ from PythonApiRequests.src.infra.requests.api_requests import ApiRequests, Reque
 import pytest
 
 
-class PokemonEntity(ApiRequests):
+class PokemonApi(ApiRequests):
     __base_url = 'https://pokeapi.co/api/v2/pokemon'
 
     def get_pokemon_data_length(self):
