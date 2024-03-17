@@ -2,7 +2,7 @@ import json
 from PythonApiRequests.src.infra.utils.test_steps.steps import Step
 
 import pytest
-from PythonApiRequests.src.infra.requests.api_requests import ApiRequests
+from PythonApiRequests.src.infra.clients.api_client import ApiClient
 from PythonApiRequests.src.infra.recources.users.users_api import UsersApi
 
 
@@ -13,7 +13,7 @@ def entity_class_object_creation():
 
 
 def test_get_users():
-    api_requests = ApiRequests()
+    api_requests = ApiClient()
     response = api_requests.get("https://gorest.co.in/public/v2/users?page=1&status=inactive")
     response_json = response.json()
     if response.status_code == 200:

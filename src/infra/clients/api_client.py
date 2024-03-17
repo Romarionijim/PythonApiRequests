@@ -1,9 +1,9 @@
 import requests
 import os
-from typing import Dict, TypeVar, Optional, List, Union
+from typing import Dict, TypeVar, Optional
 from dotenv import load_dotenv
 from PythonApiRequests.src.infra.enums.http_methods import HttpMethods
-from PythonApiRequests.src.infra.utils.interfaces.request_options import RequestOptions
+from PythonApiRequests.src.infra.utils.data_classes.request_options import RequestOptions
 import logging
 from PythonApiRequests.src.infra.utils.custom_exceptions.exceptions import PaginationError
 
@@ -12,7 +12,7 @@ load_dotenv()
 T = TypeVar("T")
 
 
-class ApiRequests:
+class ApiClient:
 
     def __init__(self):
         self.requests = requests.Session()

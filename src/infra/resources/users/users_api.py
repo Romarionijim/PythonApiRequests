@@ -1,11 +1,11 @@
-from PythonApiRequests.src.infra.requests.api_requests import ApiRequests
+from PythonApiRequests.src.infra.clients.api_client import ApiClient
 from PythonApiRequests.src.infra.enums.urls import Urls
 from PythonApiRequests.src.infra.enums.end_points import EndPoints
-from PythonApiRequests.src.infra.utils.interfaces.request_options import RequestOptions
+from PythonApiRequests.src.infra.utils.data_classes.request_options import RequestOptions
 from PythonApiRequests.src.infra.utils.faker.fake_data_generator import FakeDataGenerator
 
 
-class UsersApi(ApiRequests):
+class UsersApi(ApiClient):
     URL = Urls.GO_REST_API_URL.value
     USERS_ENDPOINT = EndPoints.USERS_END_POINT.value
 
