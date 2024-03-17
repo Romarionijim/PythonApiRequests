@@ -53,7 +53,7 @@ class ApiClient:
         return response_key
 
     def __paginate_request(self, method: HttpMethods, url: str, data: Optional[Dict[str, T]] = None,
-                           params: Optional[Dict[str, T]] = None, options: RequestOptions = RequestOptions()):
+                           params: Optional[Dict[str, T]] = None, options: Optional[RequestOptions] = None):
         """helper function that provides pagination options - either by page pagination or by offset and limit
         pagination"""
 
@@ -100,7 +100,7 @@ class ApiClient:
     def __make_http_request(self, method: HttpMethods, url: str,
                             params: Optional[Dict[str, T]] = None,
                             data: Optional[Dict[str, T]] = None,
-                            options: RequestOptions = RequestOptions()):
+                            options: Optional[RequestOptions] = None):
         """helper method that sends http request which can include pagination - this method is encapsulated and is
         used by the public CRUD methods below"""
         if options.paginate:
@@ -108,17 +108,17 @@ class ApiClient:
         else:
             return self.__make_request(method, url, data=data, params=params, options=options)
 
-    def get(self, url: str, params: Optional[Dict[str, str]] = None, options: RequestOptions = RequestOptions()):
+    def get(self, url: str, params: Optional[Dict[str, str]] = None, options: Optional[RequestOptions] = None):
         return self.__make_http_request(HttpMethods.GET, url, params=params, options=options)
 
-    def post(self, url: str, data: Dict[str, T], options: RequestOptions):
+    def post(self, url: str, data: Dict[str, T], options: Optional[RequestOptions] = None):
         return self.__make_http_request(HttpMethods.POST, url, data=data, options=options)
 
-    def put(self, url: str, data: Dict[str, T], options: RequestOptions = RequestOptions()):
+    def put(self, url: str, data: Dict[str, T], options: Optional[RequestOptions] = None):
         return self.__make_http_request(HttpMethods.PUT, url, data=data, options=options)
 
-    def patch(self, url: str, data: Dict[str, T], options: RequestOptions = RequestOptions()):
+    def patch(self, url: str, data: Dict[str, T], options: Optional[RequestOptions] = None):
         return self.__make_http_request(HttpMethods.PATCH, url, data=data, options=options)
 
-    def delete(self, url, options: RequestOptions = RequestOptions()):
+    def delete(self, url, options: Optional[RequestOptions] = None):
         return self.__make_http_request(HttpMethods.DELETE, url, options=options)

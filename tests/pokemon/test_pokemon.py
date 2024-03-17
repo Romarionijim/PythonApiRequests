@@ -1,4 +1,4 @@
-from PythonApiRequests.src.infra.recources.pokemon.pokemon_api import PokemonApi
+from PythonApiRequests.src.infra.resources.pokemon.pokemon_api import PokemonApi
 import json
 
 

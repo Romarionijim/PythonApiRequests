@@ -3,7 +3,7 @@ from PythonApiRequests.src.infra.utils.test_steps.steps import Step
 
 import pytest
 from PythonApiRequests.src.infra.clients.api_client import ApiClient
-from PythonApiRequests.src.infra.recources.users.users_api import UsersApi
+from PythonApiRequests.src.infra.resources.users.users_api import UsersApi
 
 
 @pytest.fixture()
