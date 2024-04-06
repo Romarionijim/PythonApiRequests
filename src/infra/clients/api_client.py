@@ -31,16 +31,16 @@ class ApiClient:
         self.__is_token_required(headers, options)
         response = None
 
-        match method:
-            case HttpMethods.GET:
+        match method.value:
+            case 'GET':
                 response = self.requests.get(url, headers=headers, params=params)
-            case HttpMethods.POST:
+            case 'POST':
                 response = self.requests.post(url, headers=headers, data=data)
-            case HttpMethods.PUT:
+            case 'PUT':
                 response = self.requests.put(url, headers=headers, data=data)
-            case HttpMethods.PATCH:
+            case 'PATCH':
                 response = self.requests.patch(url, headers=headers, data=data)
-            case HttpMethods.DELETE:
+            case 'DELETE':
                 response = self.requests.delete(url)
 
         return response
